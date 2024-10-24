@@ -1,8 +1,9 @@
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 // material-ui
-import Chip from '@mui/material/Chip';
-import Grid from '@mui/material/Grid';
+// import Chip from '@mui/material/Chip';
+// import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -11,47 +12,77 @@ import Box from '@mui/material/Box';
 import MainCard from 'components/MainCard';
 
 // assets
-import RiseOutlined from '@ant-design/icons/RiseOutlined';
-import FallOutlined from '@ant-design/icons/FallOutlined';
+// import RiseOutlined from '@ant-design/icons/RiseOutlined';
+// import FallOutlined from '@ant-design/icons/FallOutlined';
 
-const iconSX = { fontSize: '0.75rem', color: 'inherit', marginLeft: 0, marginRight: 0 };
+import MuscleContinuouDays from './MuscleContinuouDays';
+import RMCounter from './RMCounter';
 
-export default function AnalyticEcommerce({ color = 'primary', title, count, percentage, isLoss, extra }) {
+// const iconSX = { fontSize: '0.75rem', color: 'inherit', marginLeft: 0, marginRight: 0 };
+
+export default function AnalyticEcommerce({ /*color = 'primary', */ title /*count, percentage, isLoss, extra */ }) {
+  const [MuscleCountValue, setMuscleCountValue] = useState('');
+
+  // 子コンポーネントから筋トレ継続日数を届けてもらう。
+  const muscleCount = (newValue) => {
+    setMuscleCountValue(newValue);
+  };
+
+  const Items = {
+    筋トレ: {
+      MuscleCalender: <MuscleContinuouDays muscleCount={muscleCount} />,
+      MuscleCount: MuscleCountValue
+    },
+    RM計算機: {
+      RMcounter: <RMCounter />
+    },
+    偉人の名言: {
+      RMcounter: <RMCounter />
+    }
+  };
+
+  let Contents = '';
+
+  switch (title) {
+    case '筋トレ':
+      Contents = (
+        <div style={{ display: 'flex' }}>
+          <div>
+            <Typography variant="h4" color="inherit">
+              {Items[title].MuscleCount} 日
+            </Typography>
+          </div>
+          <div>{Items[title].MuscleCalender}</div>
+        </div>
+      );
+      break;
+    case 'RM計算機':
+      Contents = (
+        <div>
+          <div>{Items[title].RMcounter}</div>
+        </div>
+      );
+      break;
+    case '偉人の名言':
+      Contents = (
+        <div>
+          <div>{Items[title].RMcounter}</div>
+        </div>
+      );
+      break;
+
+    default:
+      break;
+  }
+
   return (
     <MainCard contentSX={{ p: 2.25 }}>
       <Stack spacing={0.5}>
         <Typography variant="h6" color="text.secondary">
           {title}
         </Typography>
-        <Grid container alignItems="center">
-          <Grid item>
-            <Typography variant="h4" color="inherit">
-              {count}
-            </Typography>
-          </Grid>
-          {percentage && (
-            <Grid item>
-              <Chip
-                variant="combined"
-                color={color}
-                icon={isLoss ? <FallOutlined style={iconSX} /> : <RiseOutlined style={iconSX} />}
-                label={`${percentage}%`}
-                sx={{ ml: 1.25, pl: 1 }}
-                size="small"
-              />
-            </Grid>
-          )}
-        </Grid>
       </Stack>
-      <Box sx={{ pt: 2.25 }}>
-        <Typography variant="caption" color="text.secondary">
-          You made an extra{' '}
-          <Typography variant="caption" sx={{ color: `${color || 'primary'}.main` }}>
-            {extra}
-          </Typography>{' '}
-          this year
-        </Typography>
-      </Box>
+      <Box sx={{ pt: 2.25 }}>{Contents && Contents}</Box>
     </MainCard>
   );
 }

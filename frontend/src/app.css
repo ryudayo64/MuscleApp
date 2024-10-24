@@ -1,0 +1,19 @@
+.calenderDay_long-press {
+    border: 2px solid gray;
+    border-radius: 50%;
+}
+
+.calenderDay_long-press :hover {
+    border: 2px solid gray;
+}
+
+.long-press-border {
+    border: 2px solid red;
+    /* 長押しされた時のボーダー色 */
+}
+
+.selected-day {
+    background-color: rgb(133, 133, 133);
+    /* 選択された日付の背景色 */
+    color: white;
+}
